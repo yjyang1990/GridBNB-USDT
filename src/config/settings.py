@@ -14,6 +14,9 @@ class Settings(BaseSettings):
     # --- 从 .env 文件读取的必需配置 ---
     BINANCE_API_KEY: str = ""  # 添加默认值以便测试
     BINANCE_API_SECRET: str = ""  # 添加默认值以便测试
+    
+    # --- 测试网配置 ---
+    USE_TESTNET: bool = False  # 是否使用币安测试网
 
     # --- 策略核心配置 (从 .env 读取) ---
     SYMBOLS: str = "BNB/USDT"  # 从 .env 读取交易对列表字符串

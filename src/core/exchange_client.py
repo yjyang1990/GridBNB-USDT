@@ -37,8 +37,19 @@ class ExchangeClient:
             'aiohttp_proxy': proxy,  # 使用环境变量中的代理配置
             'verbose': settings.DEBUG_MODE
         })
+        
+        # 根据配置启用沙盒模式（测试网）
+        if settings.USE_TESTNET:
+            self.exchange.set_sandbox_mode(True)
         if proxy:
             self.logger.info(f"使用代理: {proxy}")
+        
+        # 显示测试网状态
+        if settings.USE_TESTNET:
+            self.logger.info("🔧 使用币安测试网进行调试")
+        else:
+            self.logger.info("🌐 使用币安主网")
+            
         # 然后进行其他配置
         self.logger.setLevel(logging.INFO)
         self.logger.info("交易所客户端初始化完成")
