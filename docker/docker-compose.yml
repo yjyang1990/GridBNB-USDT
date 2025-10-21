@@ -17,8 +17,8 @@ services:
     # ports:
     #   - "8080:58181"  # 已注释：防止绕过Nginx的直接访问
     volumes:
-      - ./:/app
-      - ./data:/app/data  # 持久化数据目录
+      - ../:/app
+      - ../data:/app/data  # 持久化数据目录
     networks:
       - gridbnb-network
     healthcheck:
