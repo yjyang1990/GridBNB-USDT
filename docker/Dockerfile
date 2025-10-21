@@ -24,6 +24,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
 
 # 创建非root用户（安全加固）
 RUN groupadd -r appuser && useradd -r -g appuser appuser && \
+    mkdir -p /app/logs && \
     chown -R appuser:appuser /app
 
 # 健康检查
