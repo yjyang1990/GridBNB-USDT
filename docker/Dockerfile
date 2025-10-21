@@ -25,11 +25,13 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # 创建非root用户（安全加固）
 RUN groupadd -r appuser && useradd -r -g appuser appuser && \
     chown -R appuser:appuser /app
-USER appuser
 
 # 健康检查
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:58181/health || exit 1
+
+# 切换到非root用户
+USER appuser
 
 # 设置默认启动命令
 CMD ["python", "src/main.py"]
