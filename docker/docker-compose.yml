@@ -49,10 +49,6 @@ services:
       timeout: 10s
       retries: 3
 
-# 定义持久化卷
-volumes:
-  # 监控相关卷已移除
-
 # 定义网络
 networks:
   gridbnb-network:
