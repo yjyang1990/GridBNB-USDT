@@ -4,8 +4,8 @@ services:
   # GridBNB 交易机器人服务
   gridbnb-bot:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: docker/Dockerfile
     container_name: gridbnb-bot
     restart: always
     env_file:
