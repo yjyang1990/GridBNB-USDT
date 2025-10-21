@@ -56,6 +56,7 @@ class Settings(BaseSettings):
     AI_PROVIDER: str = "openai"  # openai / anthropic
     AI_MODEL: str = "gpt-4-turbo"
     AI_API_KEY: Optional[str] = None
+    AI_BASE_URL: Optional[str] = None  # 自定义 OpenAI API base URL
     AI_CONFIDENCE_THRESHOLD: int = 70
     AI_TRIGGER_INTERVAL: int = 900  # 秒 (15分钟)
     AI_MAX_CALLS_PER_DAY: int = 100
@@ -204,6 +205,20 @@ class Settings(BaseSettings):
             raise ValueError(f"AI_MAX_CALLS_PER_DAY 必须至少为1，当前设置为 {v}")
         if v > 500:
             logging.warning(f"AI_MAX_CALLS_PER_DAY 设置过高 ({v})，可能产生高额费用")
+        return v
+
+    @field_validator('AI_BASE_URL')
+    @classmethod
+    def validate_ai_base_url(cls, v):
+        """验证AI Base URL格式"""
+        if v is None:
+            return v
+        if not isinstance(v, str):
+            raise ValueError("AI_BASE_URL 必须是字符串")
+        if not v.startswith(('http://', 'https://')):
+            raise ValueError("AI_BASE_URL 必须以 http:// 或 https:// 开头")
+        if len(v) < 10:
+            raise ValueError("AI_BASE_URL 长度过短，请检查URL格式")
         return v
 
     # --- 固定配置 (不常修改，保留在代码中) ---

@@ -84,6 +84,7 @@ class AITradingStrategy:
         self.ai_provider = AIProvider(getattr(settings, 'AI_PROVIDER', 'openai'))
         self.ai_model = getattr(settings, 'AI_MODEL', 'gpt-4-turbo')
         self.ai_api_key = getattr(settings, 'AI_API_KEY', None)
+        self.ai_base_url = getattr(settings, 'AI_BASE_URL', None)  # 自定义 base URL
         self.confidence_threshold = getattr(settings, 'AI_CONFIDENCE_THRESHOLD', 70)
         self.trigger_interval = getattr(settings, 'AI_TRIGGER_INTERVAL', 900)  # 15分钟
         self.max_calls_per_day = getattr(settings, 'AI_MAX_CALLS_PER_DAY', 100)
@@ -105,6 +106,7 @@ class AITradingStrategy:
             f"启用: {self.ai_enabled} | "
             f"提供商: {self.ai_provider.value} | "
             f"模型: {self.ai_model} | "
+            f"Base URL: {self.ai_base_url or '默认'} | "
             f"置信度阈值: {self.confidence_threshold}%"
         )
 
@@ -125,9 +127,17 @@ class AITradingStrategy:
                 self.ai_client = None
                 return
 
+            # 设置 API Key
             openai.api_key = self.ai_api_key
+            
+            # 如果配置了自定义 base URL，则设置它
+            if self.ai_base_url:
+                openai.base_url = self.ai_base_url
+                self.logger.info(f"OpenAI客户端初始化成功 | 使用自定义Base URL: {self.ai_base_url}")
+            else:
+                self.logger.info("OpenAI客户端初始化成功 | 使用默认Base URL")
+            
             self.ai_client = openai
-            self.logger.info("OpenAI客户端初始化成功")
 
         elif self.ai_provider == AIProvider.ANTHROPIC:
             if not ANTHROPIC_AVAILABLE:
